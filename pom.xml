@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.beacon</groupId>
+  <artifactId>eventhubs</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>spark-streaming</name>
+  <description>Stream event from Event Hubs using Spark Streaming</description>
+
+  <properties>
+    <sbt.project.name>spark-scala</sbt.project.name>
+    <scala.binary.version>2.11</scala.binary.version>
+    <spark.version>2.3.0</spark.version>
+    <github.global.server>github</github.global.server>
+  </properties>
+
+  <profiles>
+      <!-- Profile to release a staging version to github. mvn clean deploy -Prelease-to-github -DskipTests-->
+    <profile>
+      <id>release-to-github</id>
+      <properties>
+        <github.global.server>github</github.global.server>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.github.github</groupId>
+            <artifactId>site-maven-plugin</artifactId>
+            <version>0.12</version>
+            <!-- <configuration>
+              <message>Maven artifacts for 1.0.1</message>
+              <noJekyll>true</noJekyll>
+              <outputDirectory>D:/Analytics/spark-scala/mvn-repo</outputDirectory>
+              <branch>refs/heads/maven-repo</branch>
+              <includes><include>**/*</include></includes>
+              <repositoryName>azure-event-hubs-spark</repositoryName>
+              <repositoryOwner>Azure</repositoryOwner>
+              <merge>true</merge>
+            </configuration> -->
+            <executions>
+              <!-- run site-maven-plugin's 'site' target as part of the build's normal 'deploy' phase -->
+              <execution>
+                <goals>
+                  <goal>site</goal>
+                </goals>
+                <phase>deploy</phase>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-deploy-plugin</artifactId>
+            <version>2.8.2</version>
+            <!-- <configuration>
+              <altDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-repo</altDeploymentRepository>
+            </configuration> -->
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+  <!-- <scm>
+    <connection>scm:git:git:/github.com/Azure/azure-event-hubs-spark.git</connection>
+    <developerConnection>scm:git:ssh://github.com/Azure/azure-event-hubs-spark.git</developerConnection>
+    <url>https://github.com/Azure/azure-event-hubs-spark/tree/master</url>
+  </scm> -->
+
+<dependencies>
+    <!-- https://mvnrepository.com/artifact/org.apache.spark/spark-streaming -->
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-streaming_2.11</artifactId>
+      <version>2.3.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-sql_2.11</artifactId>
+      <version>2.1.3</version>
+    </dependency>
+    <dependency>
+      <groupId>com.microsoft.azure</groupId>
+      <artifactId>azure-eventhubs</artifactId>
+      <version>1.0.2</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.apache.spark/spark-core -->
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-core_2.11</artifactId>
+      <version>1.5.2</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.apache.spark/spark-sql -->
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-sql_2.11</artifactId>
+      <version>2.3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.scala-lang.modules</groupId>
+      <artifactId>scala-java8-compat_2.11</artifactId>
+      <version>0.9.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>1.10.8</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <outputDirectory>target/scala-2.12.6/classes</outputDirectory>
+    <!--<testOutputDirectory>target/scala-${scala.binary.version}/test-classes</testOutputDirectory> -->
+    <plugins>
+      <plugin>
+        <groupId>org.scala-tools</groupId>
+        <artifactId>maven-scala-plugin</artifactId>
+        <version>2.15.2</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+              <goal>testCompile</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.0.2</version>
+          <executions>
+              <execution>
+                  <id>empty-javadoc-jar</id>
+                  <phase>package</phase>
+                  <goals>
+                      <goal>jar</goal>
+                  </goals>
+                  <configuration>
+                      <classifier>javadoc</classifier>
+                      <!-- <classesDirectory>C:\Program Files\Java\jdk1.8.0_171\bin</classesDirectory> -->
+                  </configuration>
+              </execution>
+          </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.9.1</version>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

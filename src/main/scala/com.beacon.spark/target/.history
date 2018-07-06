@@ -1,0 +1,13 @@
+compile
+run
+set ThisBuild / scalaVersion := "2.12.6"
+scalaVersion
+compile
+run
+compile
+scalaVersion
+compile
+run
+scalaVersion
+spark
+exit
